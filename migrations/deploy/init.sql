@@ -1,0 +1,40 @@
+-- Deploy idiomasse:init to pg
+
+BEGIN;
+
+CREATE TABLE "user" (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  mail TEXT NOT NULL UNIQUE,
+  lastname TEXT NOT NULL,
+  firstname TEXT NOT NULL,
+  pseudo  TEXT NOT NULL UNIQUE,
+  "password" TEXT NOT NULL UNIQUE
+);
+
+
+CREATE TABLE "language" (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "name" TEXT NOT NULL UNIQUE
+  
+);
+
+CREATE TABLE "type" (
+id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+type_name TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE word (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "name" TEXT NOT NULL UNIQUE,
+  language_id INT NOT NULL REFERENCES "language"(id),
+  type_id INT NOT NULL REFERENCES "type"(id)
+);
+
+
+CREATE TABLE user_know_word (
+  user_id INT NOT NULL REFERENCES "user"(id),
+  word_id INT NOT NULL REFERENCES word(id)
+);
+
+
+COMMIT;
