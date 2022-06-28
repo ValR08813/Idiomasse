@@ -14,6 +14,7 @@ router.get('/user/:id', userController.findOne);
 
 router.post('/signup', validateBody(userSchema), userController.validSignup);
 
+router.post('/login', userController.validLogin);
 
 
 module.exports = router;

@@ -43,7 +43,7 @@ class User {
 
         try {
             const checkMail = await client.query(`SELECT * FROM "user" WHERE mail=$1`, [mail]);
-          
+
             if (!checkMail.rows[0]) {
 
                 const checkPseudo = await client.query(`SELECT * FROM "user" WHERE pseudo=$1`, [pseudo]);
@@ -75,6 +75,33 @@ class User {
         }
     }
 
+    static async findByMail(mail, password) {
+        try {
+            const checkUser = await client.query('SELECT * FROM "user" WHERE mail=$1', [mail]);
+
+            if (checkUser.rows[0]){
+                const isPwdValid = await bcrypt.compare(password, checkUser.rows[0].password);
+
+                if (isPwdValid === false) {
+                    throw new Error('mot de passe invalide');
+                } else {
+                    const user = new User(checkUser.rows[0]);
+                    delete user.password;
+                    return user;
+                }
+
+            } else {
+                throw new Error('mail invalide');
+
+            }
+
+        } catch (error) {
+            if (error.detail) {
+                throw new Error(error.detail);
+            }
+            throw error;
+        }
+    }
     async delete() {
         try {
             await client.query('DELETE FROM "user WHERE id=', [this.id]);

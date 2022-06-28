@@ -26,4 +26,15 @@ Content-Type: application/json
     "password_confirmation": "ShootTheFokker"
      }
 
+### se connecter
+POST {{host}}/login
+Content-Type: application/json
+
+{
+    "mail": "lola@hotmail.com",
+    "lastname": "",
+    "firstname": "",
+    "pseudo": "",
+    "password":"ShootTheFokker"
+     }
  
