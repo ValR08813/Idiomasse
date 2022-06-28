@@ -1,0 +1,27 @@
+@host=http://localhost:4500
+
+@token=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoxMDQsImlhdCI6MTY1NjQ0NDIyNSwiZXhwIjoxNjU2NDY1ODI1fQ.YUDB2zUss-bgtJ0pjiIkYwkkZADu7R3V43qcIkfZpek
+Authorization:{{token}}
+Content-Type: application/json
+
+###route de test
+GET {{host}}/test
+
+### findAll
+GET {{host}}/user
+
+### findOne
+GET {{host}}/user/2
+
+### ajouter un user
+POST {{host}}/signup
+Content-Type: application/json
+
+{
+    "mail": "bossman@mail.fr",
+    "lastname": "Bosse",
+    "firstname": "Uggo",
+    "pseudo": "Alive",
+    "password":"bossman12",
+    "password_confirmation": "bossman12"
+     }
