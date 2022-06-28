@@ -15,9 +15,11 @@ module.exports = {
                     expiresIn: '360m'
                 }
             );
-        } catch(error) {
-            console.log(error);
-            throw new Error('maketoken error jwt');
+        } catch (error) {
+            if (error.detail) {
+                throw new Error(error.detail);
+            }
+            throw new Error(error.message);
         }
     },
 

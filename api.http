@@ -18,10 +18,12 @@ POST {{host}}/signup
 Content-Type: application/json
 
 {
-    "mail": "bossman@mail.fr",
+    "mail": "lola@hotmail.com",
     "lastname": "Bosse",
     "firstname": "Uggo",
-    "pseudo": "Alive",
-    "password":"bossman12",
-    "password_confirmation": "bossman12"
+    "pseudo": "fred",
+    "password":"ShootTheFokker",
+    "password_confirmation": "ShootTheFokker"
      }
+
+ 

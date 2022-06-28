@@ -1,4 +1,7 @@
-const db = require('../database');
+const { response } = require('express');
+const client = require('../database.js');
+const bcrypt = require('bcrypt');
+
 
 class User {
 
@@ -10,7 +13,7 @@ class User {
 
     static async findAll() {
         try {
-            const { rows } = await db.query('SELECT * FROM "user"');
+            const { rows } = await client.query('SELECT * FROM "user"');
             return rows.map(row => new User(row));
         } catch (error) {
             if (error.detail) {
@@ -22,7 +25,7 @@ class User {
 
     static async findOne(id) {
         try {
-            const { rows } = await db.query('SELECT * FROM "user" WHERE id=$1', [id]);
+            const { rows } = await client.query('SELECT * FROM "user" WHERE id=$1', [id]);
             if (rows[0]) {
                 return new User(rows[0]);
             }
@@ -36,15 +39,34 @@ class User {
         }
     }
 
-    async save() {
+    async addUser(mail, password, pseudo) {
+
         try {
-            if (this.id) {
-                await db.query('SELECT * FROM update_"user()', [this]);
+            const checkMail = await client.query(`SELECT * FROM "user" WHERE mail=$1`, [mail]);
+          
+            if (!checkMail.rows[0]) {
+
+                const checkPseudo = await client.query(`SELECT * FROM "user" WHERE pseudo=$1`, [pseudo]);
+
+                if (!checkPseudo.rows[0]) {
+                    const hashedPwd = await bcrypt.hash(password, 10);
+
+                    const { rows } = await client.query(' INSERT INTO "user"(mail, lastname, firstname, pseudo, password) VALUES ($1, $2, $3, $4, $5) RETURNING id', [this.mail, this.lastname, this.firstname, this.pseudo, hashedPwd]);
+
+                    this.id = rows[0].id;
+                    delete this.password;
+                    delete this.password_confirmation;
+                    return this;
+                } else {
+                    throw new Error('Ce pseudo est déjà pris.');
+                }
+
             } else {
-                const { rows } = await db.query('SELECT * FROM add_"user()', [this])
-                this.id = rows[0].id;
-                return this;
+                throw new Error('Un utilisateur avec cet email existe déjà.');
+
             }
+
+
         } catch (error) {
             if (error.detail) {
                 throw new Error(error.detail);
@@ -55,7 +77,7 @@ class User {
 
     async delete() {
         try {
-            await db.query('DELETE FROM "user WHERE id=', [this.id]);
+            await client.query('DELETE FROM "user WHERE id=', [this.id]);
         } catch (error) {
             if (error.detail) {
                 throw new Error(error.detail);
