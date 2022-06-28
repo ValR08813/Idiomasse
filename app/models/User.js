@@ -79,7 +79,7 @@ class User {
         try {
             const checkUser = await client.query('SELECT * FROM "user" WHERE mail=$1', [mail]);
 
-            if (checkUser.rows[0]){
+            if (checkUser.rows[0]) {
                 const isPwdValid = await bcrypt.compare(password, checkUser.rows[0].password);
 
                 if (isPwdValid === false) {
@@ -102,9 +102,19 @@ class User {
             throw error;
         }
     }
-    async delete() {
+
+   static async delete(id) {
         try {
-            await client.query('DELETE FROM "user WHERE id=', [this.id]);
+            const { rows } = await client.query('SELECT FROM "user" WHERE id=$1', [id]);
+
+            if (rows[0] === undefined) {
+                throw new Error(`il n'existe aucun compte avec cet id`);
+
+            } else {
+                await client.query('DELETE FROM "user" WHERE id=$1', [id]);
+
+            }
+
         } catch (error) {
             if (error.detail) {
                 throw new Error(error.detail);
@@ -112,6 +122,7 @@ class User {
             throw error;
         }
     }
+
 }
 
 module.exports = User;

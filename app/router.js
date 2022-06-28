@@ -16,5 +16,7 @@ router.post('/signup', validateBody(userSchema), userController.validSignup);
 
 router.post('/login', userController.validLogin);
 
+router.delete('/user', authentification, userController.deleteUser);
+
 
 module.exports = router;

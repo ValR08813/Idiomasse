@@ -1,6 +1,6 @@
 @host=http://localhost:4500
 
-@token=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoxMDQsImlhdCI6MTY1NjQ0NDIyNSwiZXhwIjoxNjU2NDY1ODI1fQ.YUDB2zUss-bgtJ0pjiIkYwkkZADu7R3V43qcIkfZpek
+@token=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoxNiwiaWF0IjoxNjU2NDUzOTM0LCJleHAiOjE2NTY0NzU1MzR9.ZOBopOqqvPpzhb6K7KhEyDVFj-qg8Zz_NPovDzETkng
 Authorization:{{token}}
 Content-Type: application/json
 
@@ -37,4 +37,23 @@ Content-Type: application/json
     "pseudo": "",
     "password":"ShootTheFokker"
      }
+
+### update user
+PATCH {{host}}/user
+Authorization:{{token}}
+Content-Type: application/json
+
+{
+  "mail": "bossman@mail.fr",
+    "lastname": "Bosse",
+    "firstname": "Uggo",
+    "pseudo": "Alive",
+    "password":"bossman12",
+    "password_confirmation": "bossman12"
+}
+
+### supprimer son compte
+DELETE {{host}}/user
+Authorization:{{token}}
+Content-Type: application/json
  
