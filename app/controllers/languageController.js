@@ -26,11 +26,16 @@ module.exports = {
             response.status(500).json(error.message);
         }
     },
-    delete: async (request, response) => {
+
+    deleteLanguage: async (request, response) => {
         try {
             const id = parseInt(request.params.id, 10);
-            await new Language({ id }).delete();
-            response.status(204).json('language supprimé');
+            // await Language.delete(id);
+            // response.status(204).json(`langue supprimée`);
+
+            const language = await Language.delete(id);
+            response.status(200).json(`langue "${language}" supprimée`);
+
         } catch (error) {
             console.log(error);
             response.status(500).json(error.message);

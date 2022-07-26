@@ -36,15 +36,13 @@ class Word {
         }
     }
 
-    async save() {
+    async save(languageId) {
         try {
-            if (this.id) {
-                await db.query('SELECT * FROM update_word()', [this]);
-            } else {
-                const { rows } = await db.query('SELECT * FROM add_word()', [this])
-                this.id = rows[0].id;
-                return this;
-            }
+
+            const { rows } = await db.query('INSERT INTO word (name, language_id, trad) VALUES ($1, $2, $3)', [this.name, languageId, this.trad])
+            this.id = rows[0].id;
+            return this;
+
         } catch (error) {
             if (error.detail) {
                 throw new Error(error.detail);
@@ -55,7 +53,7 @@ class Word {
 
     async delete() {
         try {
-            await db.query('DELETE FROM word WHERE id=', [this.id]);
+            await db.query('DELETE FROM word WHERE id=$1', [this.id]);
         } catch (error) {
             if (error.detail) {
                 throw new Error(error.detail);

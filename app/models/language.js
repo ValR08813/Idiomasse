@@ -22,7 +22,7 @@ class Language {
 
     static async findOne(id) {
         try {
-            const { rows } = await db.query('SELECT * FROM language WHERE id=', [id]);
+            const { rows } = await db.query('SELECT * FROM language WHERE id=$1', [id]);
             if (rows[0]) {
                 return new Language(rows[0]);
             }
@@ -38,13 +38,10 @@ class Language {
 
     async save() {
         try {
-            if (this.id) {
-                await db.query('SELECT * FROM update_language()', [this]);
-            } else {
-                const { rows } = await db.query('SELECT * FROM add_language()', [this])
-                this.id = rows[0].id;
-                return this;
-            }
+            const { rows } = await db.query('INSERT INTO language (name) VALUES ($1) RETURNING id', [this.name]);
+            this.id = rows[0].id;
+            return this;
+
         } catch (error) {
             if (error.detail) {
                 throw new Error(error.detail);
@@ -53,9 +50,12 @@ class Language {
         }
     }
 
-    async delete() {
+    static async delete(id) {
         try {
-            await db.query('DELETE FROM language WHERE id=', [this.id]);
+            const language = await db.query('SELECT name FROM language WHERE ID=$1', [id])
+            await db.query('DELETE FROM language WHERE id=$1', [id]);
+            console.log('languageModel', language.rows[0].name);
+            return language.rows[0].name;
         } catch (error) {
             if (error.detail) {
                 throw new Error(error.detail);

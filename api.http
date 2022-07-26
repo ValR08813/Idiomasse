@@ -1,9 +1,0 @@
-@host=http://localhost:4500
-
-
-
-### Page d'accueil avec les 3 infos qui m'interessent
-GET {{host}}
-
-### Toutes les citations
-GET {{host}}/words
