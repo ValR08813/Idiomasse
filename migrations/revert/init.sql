@@ -2,6 +2,6 @@
 
 BEGIN;
 
-DROP TABLE user_know_word, word, "type", "language", "user" CASCADE;
+DROP TABLE user_know_word, word, "language", "user" CASCADE;
 
 COMMIT;

@@ -16,8 +16,9 @@ POST {{host}}/languages/save
 Content-Type: application/json
 
 {
-    "name": "Français"
+    "name": "anglais"
     }
 
 ###Supprimer une langue
-DELETE {{host}}/languages/17
+DELETE {{host}}/languages/1
+

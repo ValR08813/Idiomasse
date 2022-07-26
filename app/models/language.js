@@ -38,9 +38,21 @@ class Language {
 
     async save() {
         try {
-            const { rows } = await db.query('INSERT INTO language (name) VALUES ($1) RETURNING id', [this.name]);
-            this.id = rows[0].id;
-            return this;
+            const name = this.name.toLowerCase();
+            const checkLanguage = await db.query('SELECT * FROM language WHERE name=$1', [name]);
+
+            console.log('nameModel', name);
+
+
+            if (!checkLanguage.rows[0]) {
+                const { rows } = await db.query('INSERT INTO language (name) VALUES ($1) RETURNING id', [this.name]);
+                this.id = rows[0].id;
+                return this;
+            } else {
+                throw Error('Langue déjà ajoutée');
+
+            }
+
 
         } catch (error) {
             if (error.detail) {
@@ -52,9 +64,8 @@ class Language {
 
     static async delete(id) {
         try {
-            const language = await db.query('SELECT name FROM language WHERE ID=$1', [id])
+            const language = await db.query('SELECT name FROM language WHERE id=$1', [id])
             await db.query('DELETE FROM language WHERE id=$1', [id]);
-            console.log('languageModel', language.rows[0].name);
             return language.rows[0].name;
         } catch (error) {
             if (error.detail) {
