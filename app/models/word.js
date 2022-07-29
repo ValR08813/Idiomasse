@@ -36,12 +36,22 @@ class Word {
         }
     }
 
-    async save(languageId) {
+    async save() {
         try {
+            const text = this.text.toLowerCase();
+            console.log("thisdansmodel =", this)
+            const checkWord = await db.query('SELECT * FROM word WHERE text=$1', [text]);
 
-            const { rows } = await db.query('INSERT INTO word (name, language_id, trad) VALUES ($1, $2, $3)', [this.name, languageId, this.trad])
-            this.id = rows[0].id;
-            return this;
+            console.log('wordModel', text);
+            if (!checkWord.rows[0]) {
+                const { rows } = await db.query('INSERT INTO word (text, language, trad, article) VALUES ($1, $2, $3, $4) RETURNING id', [text, this.language, this.trad, this.article])
+                this.id = rows[0].id;
+                console.log('type2this', typeof this)
+                return this;
+            } else {
+                throw Error('Mot déjà ajoutée');
+
+            }
 
         } catch (error) {
             if (error.detail) {
@@ -51,9 +61,21 @@ class Word {
         }
     }
 
-    async delete() {
+    async updateWord(word) {
+
+    }
+
+    static async delete(word) {
         try {
-            await db.query('DELETE FROM word WHERE id=$1', [this.id]);
+            console.log('word =', word.word);
+            const reqWord = word.word.toLowerCase();
+            const respWord = await db.query('SELECT FROM word WHERE text=$1', [word.word.toLowerCase()]);
+            // await db.query('DELETE FROM word WHERE wordtext=$1', [reqWord]);
+            console.log('reqWord =', word.word.toLowerCase());
+            console.log('respWord =', respWord);
+
+
+            return reqWord;
         } catch (error) {
             if (error.detail) {
                 throw new Error(error.detail);

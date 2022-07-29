@@ -12,18 +12,19 @@ CREATE TABLE "user" (
 );
 
 
-CREATE TABLE "language" (
-  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "name" TEXT NOT NULL UNIQUE
+-- CREATE TABLE "language" (
+--   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+--   "name" TEXT NOT NULL UNIQUE
   
-);
+-- );
 
 
 CREATE TABLE word (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "name" TEXT NOT NULL UNIQUE,
-  language_id INT NOT NULL REFERENCES "language"(id),
-  trad TEXT NOT NULL
+  "text" TEXT NOT NULL UNIQUE,
+  "language" TEXT NOT NULL,
+  trad TEXT NOT NULL,
+  article TEXT NOT NULL
 );
 
 

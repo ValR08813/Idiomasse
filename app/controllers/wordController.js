@@ -15,14 +15,14 @@ module.exports = {
 
     save: async (request, response) => {
         try {
-            const instance = new Author(request.body);
+            const instance = new Word(request.body);
             const word = await instance.save();
             if (word) {
                 //si la phrase n'existe pas on fait un insert, on créé une nouvelle phrase
                 return response.status(201).json(word);
             }
             //sinon on update la phrase existante
-            response.status(204).json('auteur updaté')
+            response.status(204).json('Mot mis à jour')
 
         } catch (error) {
             console.log(error);
@@ -31,11 +31,13 @@ module.exports = {
 
     },
 
-    delete: async (request, response) => {
+    deleteWord: async (request, response) => {
         try {
-            const id = parseInt(request.params.id, 10);
-            await new Word({ id }).delete();
-            response.status(204).json('Mot supprimé');
+            const reqWord = request.params;
+            console.log('reqWord', reqWord);
+            const word = await Word.delete(reqWord);
+            console.log('wordCOntroller', word);
+            response.status(200).json(`Mot "${reqWord.word}"supprimé`);
         } catch (error) {
             console.log(error);
             response.status(500).json(error.message);

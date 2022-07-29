@@ -1,0 +1,27 @@
+@host=http://localhost:4500
+
+
+
+### Page d'accueil avec les 3 infos qui m'interessent
+GET {{host}}
+
+### Tous les mots
+GET {{host}}/words
+
+### Un mot particulier
+GET {{host}}/words/father
+
+###ajouter un mot
+POST {{host}}/words/save
+Content-Type: application/json
+
+{
+    "text": "father",
+    "language": "English",
+    "trad": "Père",
+    "article": "Le"
+    }
+
+###Supprimer un mot
+DELETE {{host}}/words/father
+
