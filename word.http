@@ -18,8 +18,8 @@ Content-Type: application/json
 {
     "text": "father",
     "language": "English",
-    "trad": "Père",
-    "article": "Le"
+    "trad": "Mère",
+    "article": "The"
     }
 
 ###Supprimer un mot
